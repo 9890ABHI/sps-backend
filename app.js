@@ -5,9 +5,9 @@ app.use(express.json());
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cron = require("node-cron");
+require("dotenv").config();
 
-const mongourl =
-  "mongodb+srv://axyz28475:axyz28475@cluster0.p2kglk5.mongodb.net/?retryWrites=true&w=majority";
+const mongourl = process.env.Mongodb_URL;
 const JWT_SECRET =
   "hasljnvaseijwe093489()lkjfnijgjsk{jflakjfieurq37083ikgkngnf}aldkbzxcv[bsa]]hfeiof";
 const port = 3001;
@@ -437,7 +437,6 @@ cron.schedule("0 0 * * *", async () => {
   try {
     const date = new Date();
     console.log("Cron job started at:", date);
-    // const currentDateTime = new Date();
     await Notification.deleteMany({
       expiration: { $lte: date },
     });
