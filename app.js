@@ -8,8 +8,7 @@ const cron = require("node-cron");
 require("dotenv").config();
 
 const mongourl = process.env.Mongodb_URL;
-const JWT_SECRET =
-  "hasljnvaseijwe093489()lkjfnijgjsk{jflakjfieurq37083ikgkngnf}aldkbzxcv[bsa]]hfeiof";
+const JWT_SECRET = process.env.JWT;
 const port = 3001;
 app.listen(port, () => {
   console.log("====================================");
