@@ -436,7 +436,7 @@ app.post("/api/notifications", async (req, res) => {
   }
 });
 
-cron.schedule("0 0 * * *", async () => {
+cron.schedule("* * * * *", async () => {
   try {
     const date = new Date();
     console.log("Cron job started at:", date);
