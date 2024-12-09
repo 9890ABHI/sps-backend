@@ -5,29 +5,47 @@ app.use(express.json());
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cron = require("node-cron");
+const cors = require("cors");
 require("dotenv").config();
 
 // const mongourl = process.env.Mongodb_URL;
 const mongourl =
-  "mongodb+srv://axyz28475:axyz28475@cluster0.p2kglk5.mongodb.net/?retryWrites=true&w=majority";
+  "mongodb+srv://axyz28475:axyz28475@cluster0.p2kglk5.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+// "mongodb+srv://axyz28475:axyz28475@cluster0.p2kglk5.mongodb.net/?retryWrites=true&w=majority";
 // const JWT_SECRET = process.env.JWT;
 const JWT_SECRET =
   "hasljnvaseijwe093489()lkjfnijgjsk{jflakjfieurq37083ikgkngnf}aldkbzxcv[bsa]]hfeiof";
-const port = 3001;
+const port = 5000;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Connect to MongoDB
+mongoose
+  .connect(mongourl, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.log("Failed to connect to MongoDB", err));
+
+// Start server
 app.listen(port, () => {
   console.log("====================================");
   console.log("server running on ", port);
   console.log("====================================");
 });
+// app.listen(port, () => console.log(`Server running on http://localhost:${PORT}`));
 
-mongoose
-  .connect(mongourl)
-  .then(() => {
-    console.log("database connected");
-  })
-  .catch((e) => {
-    console.log(e);
-  });
+// mongoose
+//   .connect(mongourl)
+//   .then(() => {
+//     console.log("database connected");
+//   })
+//   .catch((e) => {
+//     console.log(e);
+//   });
 require("./userSchemas");
 require("./teacherSchemas");
 require("./coursesSchmas");
@@ -436,20 +454,20 @@ app.post("/api/notifications", async (req, res) => {
   }
 });
 
-cron.schedule("* * * * *", async () => {
-  try {
-    const date = new Date();
-    console.log("Cron job started at:", date);
-    await Notification.deleteMany({
-      expiration: { $lte: date },
-    });
-    console.log("Expired notifications removed successfully.");
-  } catch (error) {
-    console.error("Error removing expired notifications:", error);
-  } finally {
-    console.log("Cron job finished at:", new Date());
-  }
-});
+// cron.schedule("* * * * *", async () => {
+//   try {
+//     const date = new Date();
+//     console.log("Cron job started at:", date);
+//     await Notification.deleteMany({
+//       expiration: { $lte: date },
+//     });
+//     console.log("Expired notifications removed successfully.");
+//   } catch (error) {
+//     console.error("Error removing expired notifications:", error);
+//   } finally {
+//     console.log("Cron job finished at:", new Date());
+//   }
+// });
 
 app.get("/api/notifications", async (req, res) => {
   try {
