@@ -8,6 +8,10 @@ const cron = require("node-cron");
 const cors = require("cors");
 require("dotenv").config();
 
+const mongourl = process.env.DATABASE_URL;
+const JWT_SECRET = process.env.JWT_SECRET;
+const port = process.env.PORT;
+
 // Middleware
 app.use(cors());
 app.use(express.json());
