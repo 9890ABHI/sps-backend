@@ -8,15 +8,6 @@ const cron = require("node-cron");
 const cors = require("cors");
 require("dotenv").config();
 
-// const mongourl = process.env.Mongodb_URL;
-const mongourl =
-  "mongodb+srv://axyz28475:axyz28475@cluster0.p2kglk5.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-// "mongodb+srv://axyz28475:axyz28475@cluster0.p2kglk5.mongodb.net/?retryWrites=true&w=majority";
-// const JWT_SECRET = process.env.JWT;
-const JWT_SECRET =
-  "hasljnvaseijwe093489()lkjfnijgjsk{jflakjfieurq37083ikgkngnf}aldkbzxcv[bsa]]hfeiof";
-const port = 5000;
-
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -50,11 +41,13 @@ require("./userSchemas");
 require("./teacherSchemas");
 require("./coursesSchmas");
 require("./notificationSchemas");
+require("./attendanceSchemas");
 
 const User = mongoose.model("UserInfo");
 const Teacher = mongoose.model("TeacherInfo");
 const Course = mongoose.model("CourseSchema");
 const Notification = mongoose.model("Notification");
+const Attendance = mongoose.model("Attendance");
 
 app.get("/", (req, res) => {
   res.send({ status: "Started" });
@@ -476,5 +469,28 @@ app.get("/api/notifications", async (req, res) => {
   } catch (error) {
     console.error("Error fetching notifications:", error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// add attendance get and post api to be configure
+
+// ✅ Mark Attendance (POST)
+app.post("/api/attendance", async (req, res) => {
+  try {
+    const newAttendance = new Attendance(req.body);
+    await newAttendance.save();
+    res.status(201).json({ message: "Attendance marked successfully!" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to mark attendance" });
+  }
+});
+
+// ✅ Get All Attendance Records (GET)
+app.get("/api/attendance", async (req, res) => {
+  try {
+    const records = await Attendance.find();
+    res.json(records);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch attendance records" });
   }
 });
